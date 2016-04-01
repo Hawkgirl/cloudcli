@@ -13,7 +13,7 @@ class ListInstance(Lister):
         return parser
 
     def take_action(self, args):
-	import os
+	instances = self.app.cloud_obj.compute.list_instances()
         return (('Name', 'Size'),
-                ((n, os.stat(n).st_size) for n in os.listdir('.'))
+                ((instance.name, instace.instance_type) for instance in instances)
                 )

@@ -2,19 +2,21 @@ import sys
 from os import environ
 from cliff.app import App
 from cliff.commandmanager import CommandManager
-from cloudcli  import version
+from cloudcli import version
+from ext_cloud import get_ext_cloud
 
 
 class CloudcliApp(App):
 
     def __init__(self, **kwargs):
-        super(CloudcliApp, self).__init__( description='cloudcli', version=version.__version__, command_manager=CommandManager('cloudcli.client'), **kwargs)
+        super(CloudcliApp, self).__init__(description='cloudcli', version=version.__version__,
+                                          command_manager=CommandManager('cloudcli.client'), **kwargs)
 
     def build_option_parser(self, description, version, argparse_kwargs=None):
-        ''' 
- 	Introduces global arguments for the application.
+        '''
+        Introduces global arguments for the application.
         This is inherited from the framework.
-        ''' 
+        '''
         parser = super(CloudcliApp, self).build_option_parser(
             description, version, argparse_kwargs)
         parser.add_argument('--os-identity-api-version',
@@ -85,44 +87,31 @@ class CloudcliApp(App):
 
     def initialize_app(self, argv):
         self.LOG.debug('initialize_app')
-	args = self.options
-	if args.os_auth_token:
+        args = self.options
+        if args.os_auth_token:
             if not args.os_auth_url:
                 raise Exception('ERROR: please specify --os-auth-url')
-	elif all([args.os_auth_url, args.os_user_id or args.os_username,
+        elif all([args.os_auth_url, args.os_user_id or args.os_username,
                   args.os_password, args.os_tenant_name or args.os_tenant_id or
                   args.os_project_name or args.os_project_id]):
-	    kwargs = dict()
+            kwargs = dict()
             kwargs['auth_url'] = args.os_auth_url
             kwargs['password'] = args.os_password
             if args.os_user_id:
                 kwargs['user_id'] = args.os_user_id
             if args.os_username:
                 kwargs['username'] = args.os_username
+            if args.os_tenant_id:
+                kwargs['tenant_id'] = args.os_tenant_id
+            if args.os_tenant_name:
+                kwargs['tenant_name'] = args.os_tenant_name
 
-            if not api_version or api_version == _DEFAULT_IDENTITY_API_VERSION:
-                if args.os_project_id:
-                    kwargs['project_id'] = args.os_project_id
-                if args.os_project_name:
-                    kwargs['project_name'] = args.os_project_name
-                if args.os_user_domain_id:
-                    kwargs['user_domain_id'] = args.os_user_domain_id
-                if args.os_user_domain_name:
-                    kwargs['user_domain_name'] = args.os_user_domain_name
-                if args.os_project_domain_id:
-                    kwargs['project_domain_id'] = args.os_project_domain_id
-                if args.os_project_domain_name:
-                    kwargs['project_domain_name'] = args.os_project_domain_name
-                auth = identity.v3.Password(**kwargs)
-            else:
-                if args.os_tenant_id:
-                    kwargs['tenant_id'] = args.os_tenant_id
-                if args.os_tenant_name:
-                    kwargs['tenant_name'] = args.os_tenant_name
-                auth = identity.v2.Password(**kwargs)
-	else:
+            self.cloud_obj = get_ext_cloud('openstack', **kwargs)
+        else:
             self.stderr.write(self.parser.format_usage())
-            raise Exception('ERROR: please specify authentication credentials'
+            raise Exception('ERROR: please specify authentication credentials')
+
+        self.cloud_obj = get_ext_cloud('openstack', **kwargs)
 
     def prepare_to_run_command(self, cmd):
         self.LOG.debug('prepare_to_run_command %s', cmd.__class__.__name__)
