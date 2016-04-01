@@ -14,6 +14,6 @@ class ListInstance(Lister):
 
     def take_action(self, args):
 	instances = self.app.cloud_obj.compute.list_instances()
-        return (('Name', 'Size'),
-                ((instance.name, instace.instance_type) for instance in instances)
+        return (('ID', 'Name', 'Public IP', 'State'),
+                ((instance.id, instance.name, instance.public_ip, instance.state) for instance in instances)
                 )
