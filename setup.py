@@ -21,7 +21,8 @@ setup(name=PROJECT,
         ],
         'cloudcli.client': [
 	    'instance-list = cloudcli.instance:ListInstance',
-	    'instance-show = cloudcli.instance:ShowInstance'
+	    'instance-show = cloudcli.instance:ShowInstance',
+	    'token-create = cloudcli.token:TokenCreate'
         ],
 	},
 
