@@ -79,6 +79,12 @@ class CloudcliApp(App):
                             metavar='<auth-project-domain-name>',
                             default=environ.get('OS_PROJECT_DOMAIN_NAME'),
                             help='Defaults to env[OS_PROJECT_DOMAIN_NAME].')
+        parser.add_argument('--os-cacert',
+                            metavar='<ca-certificate>',
+                            default=environ.get('OS_CACERT'),
+                            help='Specify a CA bundle file to use in verifying a'
+                                'TLS (https) server certificate. Defaults to'
+                                'env[OS_CACERT].')
         parser.add_argument('--os-auth-token',
                             metavar='<auth-token>',
                             default=environ.get('OS_AUTH_TOKEN'),
@@ -105,6 +111,8 @@ class CloudcliApp(App):
                 kwargs['tenant_id'] = args.os_tenant_id
             if args.os_tenant_name:
                 kwargs['tenant_name'] = args.os_tenant_name
+            if args.os_cacert:
+                kwargs['cacert'] = args.os_cacert
 
             self.cloud_obj = get_ext_cloud('openstack', **kwargs)
         else:

@@ -14,6 +14,20 @@ class ListInstance(Lister):
 
     def take_action(self, args):
 	instances = self.app.cloud_obj.compute.list_instances()
-        return (('ID', 'Name', 'Public IP', 'Size', 'State', 'Image' ),
+        return (('ID', 'Name', 'Public-IP', 'Size', 'State', 'Image-Name' ),
                 ((instance.id, instance.name, instance.public_ip, instance.size, instance.state, instance.image_name) for instance in instances)
                 )
+
+from cliff.show import ShowOne
+
+class ShowInstance(ShowOne):
+	"""Show Instance information."""
+	def get_parser(self, prog_name):
+        	parser = super(ShowInstance, self).get_parser(prog_name)
+        	parser.add_argument('instance_id', help='The instance id.')
+        	return parser
+
+	def take_action(self, args):
+		instance = self.app.cloud_obj.compute.get_instance_by_id(args.instance_id)
+
+		return (('ID', 'Name', 'Size', 'State', 'Keypair', 'User-ID', 'User-Name', 'Project-ID', 'Project-Name', 'Image-ID', 'Image-Name', 'Public-IP', 'Private-IP', 'Availability-Zone', 'Hypervisor-Name'), (instance.id, instance.name, instance.size, instance.state, instance.keypair_name,  instance.user_id, instance.user_name, instance.tenant_id, instance.tenant_name, instance.image_id, instance.image_name, instance.public_ip, instance.private_ip, instance.availability_zone, instance.hypervisor_name))

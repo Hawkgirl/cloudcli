@@ -20,7 +20,8 @@ setup(name=PROJECT,
             'cloudcli = cloudcli.main:main'
         ],
         'cloudcli.client': [
-	    'instance-list = cloudcli.instance:ListInstance'
+	    'instance-list = cloudcli.instance:ListInstance',
+	    'instance-show = cloudcli.instance:ShowInstance'
         ],
 	},
 
