@@ -22,7 +22,9 @@ setup(name=PROJECT,
         'cloudcli.client': [
 	    'instance-list = cloudcli.instance:ListInstance',
 	    'instance-show = cloudcli.instance:ShowInstance',
-	    'token-create = cloudcli.token:TokenCreate'
+	    'token-create = cloudcli.token:TokenCreate',
+	    'zombie-list = cloudcli.zombie:ZombieList',
+	    'zombie-stats = cloudcli.zombie:ZombieStats'
         ],
 	},
 
