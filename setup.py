@@ -24,7 +24,8 @@ setup(name=PROJECT,
 	    'instance-show = cloudcli.instance:ShowInstance',
 	    'token-create = cloudcli.token:TokenCreate',
 	    'zombie-list = cloudcli.zombie:ZombieList',
-	    'zombie-stats = cloudcli.zombie:ZombieStats'
+	    'zombie-stats = cloudcli.zombie:ZombieStats',
+	    'graphite-metrics = cloudcli.graphite:GraphiteMetrics'
         ],
 	},
 
