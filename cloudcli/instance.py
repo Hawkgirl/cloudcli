@@ -4,7 +4,7 @@ class InstanceList(Lister):
     """List orders."""
 
     def get_parser(self, prog_name):
-        parser = super(ListInstance, self).get_parser(prog_name)
+        parser = super(InstanceList, self).get_parser(prog_name)
         parser.add_argument('--limit', '-l', default=10,
                             help='specify the limit to the number of items '
                                  'to list per page (default: %(default)s; '
@@ -23,7 +23,7 @@ from cliff.show import ShowOne
 class InstanceShow(ShowOne):
 	"""Show Instance information."""
 	def get_parser(self, prog_name):
-        	parser = super(ShowInstance, self).get_parser(prog_name)
+        	parser = super(InstanceShow, self).get_parser(prog_name)
         	parser.add_argument('instance_id', help='The instance id.')
         	return parser
 
