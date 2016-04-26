@@ -38,11 +38,11 @@ class HypervisorSensu(Command):
 			error = True
                         msg += '[Name:{} State:{} Status:{}]'.format(hypervisor.name, hypervisor.state, hypervisor.status)
 
-		if hypervisor.vpcus_used_percentage > 10:
+		if hypervisor.vpcus_used_percentage > 70:
 			cpu_msg += '[{} crossed 70% vcpu limit] '.format(hypervisor.name)
 			error = True
 
-		if hypervisor.memory_used_percentage > 10:
+		if hypervisor.memory_used_percentage > 70:
 			memory_msg += '[{} crossed 70% memory limit] '.format(hypervisor.name)
 			error = True
 

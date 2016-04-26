@@ -6,6 +6,11 @@ from cliff.commandmanager import CommandManager
 from cloudcli import version
 from ext_cloud import get_ext_cloud
 
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 class CloudcliApp(App):
 
