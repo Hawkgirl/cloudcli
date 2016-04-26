@@ -33,7 +33,7 @@ setup(name=PROJECT,
 	    'sensu-services = cloudcli.services:ServicesSensu',
 	    'sensu-instances = cloudcli.instance:InstancesSensu',
 	    'sensu-hypervisor = cloudcli.hypervisor:HypervisorSensu',
-	    'sensu-volume = cloudcli.volumes:VolumeSensu',
+	    'sensu-volumes = cloudcli.volumes:VolumeSensu',
 	    'graphite-metrics = cloudcli.graphite:GraphiteMetrics'
         ],
 	},
