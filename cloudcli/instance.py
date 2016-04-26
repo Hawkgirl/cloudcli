@@ -1,6 +1,6 @@
 from cliff.lister import Lister
 
-class ListInstance(Lister):
+class InstanceList(Lister):
     """List orders."""
 
     def get_parser(self, prog_name):
@@ -20,7 +20,7 @@ class ListInstance(Lister):
 
 from cliff.show import ShowOne
 
-class ShowInstance(ShowOne):
+class InstanceShow(ShowOne):
 	"""Show Instance information."""
 	def get_parser(self, prog_name):
         	parser = super(ShowInstance, self).get_parser(prog_name)
@@ -30,4 +30,24 @@ class ShowInstance(ShowOne):
 	def take_action(self, args):
 		instance = self.app.cloud_obj.compute.get_instance_by_id(args.instance_id)
 
-		return (('ID', 'Name', 'Size', 'State', 'Keypair', 'User-ID', 'User-Name', 'Project-ID', 'Project-Name', 'Image-ID', 'Image-Name', 'Public-IP', 'Private-IP', 'Availability-Zone', 'Hypervisor-Name'), (instance.id, instance.name, instance.size, instance.state, instance.keypair_name,  instance.user_id, instance.user_name, instance.tenant_id, instance.tenant_name, instance.image_id, instance.image_name, instance.public_ip, instance.private_ip, instance.availability_zone, instance.hypervisor_name))
+		return (('ID', 'Name', 'Size', 'State', 'Keypair', 'User-ID', 'User-Name', 'Project-ID', 'Project-Name', 'Image-ID', 'Image-Name', 'Public-IP', 'Private-IP', 'Availability-Zone', 'Hypervisor-Name', 'Port-ID', 'Mac-Addr', 'Network-Id'), (instance.id, instance.name, instance.size, instance.state, instance.keypair_name,  instance.user_id, instance.user_name, instance.tenant_id, instance.tenant_name, instance.image_id, instance.image_name, instance.public_ip, instance.private_ip, instance.availability_zone, instance.hypervisor_name, instance.port_id, instance.mac_id, instance.network_id))
+
+from cliff.command import Command
+
+class InstancesSensu(Command):
+    """sensu alert for instances"""
+
+    def take_action(self, parsed_args):
+	instances = self.app.cloud_obj.compute.list_instances()
+	count = 0
+	msg = ''
+	for instance in instances:
+		if instance.state == 'ERROR':
+			count += 1
+			msg += '[Id:{} Name:{} user:{} tenant:{}] '.format(instance.id, instance.name, instance.user_name, instance.tenant_name)
+
+	if count == 0:
+		return 'OK'
+	
+	raise Exception('{} instance(s) in Error state. {}'.format(count, msg))
+	

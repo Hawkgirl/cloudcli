@@ -1,4 +1,5 @@
 import sys
+import os
 from os import environ
 from cliff.app import App
 from cliff.commandmanager import CommandManager
@@ -115,11 +116,13 @@ class CloudcliApp(App):
                 kwargs['cacert'] = args.os_cacert
 
             self.cloud_obj = get_ext_cloud('openstack', **kwargs)
+	elif os.path.isfile('/etc/ext_cloud/ext_cloud.conf'):
+	    # load from config file
+            self.cloud_obj = get_ext_cloud('openstack')
         else:
             self.stderr.write(self.parser.format_usage())
             raise Exception('ERROR: please specify authentication credentials')
 
-        self.cloud_obj = get_ext_cloud('openstack', **kwargs)
 
     def prepare_to_run_command(self, cmd):
         self.LOG.debug('prepare_to_run_command %s', cmd.__class__.__name__)
