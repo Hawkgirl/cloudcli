@@ -34,5 +34,5 @@ class VolumeSensu(Command):
 	for volume in volumes:
 		msg += '[Id:{} Name:{} ] '.format(volume.id, volume.name)
 
-	raise Exception('{} instance(s) in Error state. {}'.format(len(volumes), msg))
+	raise Exception('{} volume(s) in Error state. {}'.format(len(volumes), msg))
 	
