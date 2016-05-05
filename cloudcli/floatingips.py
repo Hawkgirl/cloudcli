@@ -22,6 +22,21 @@ class FloatingipShow(ShowOne):
 
 		return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID', 'Network-ID', 'Tenant-ID'), (f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id, f.network_id, f.tenant_id))
 
+class FloatingipSummary(ShowOne):
+	def take_action(self, args):
+		total  = self.app.cloud_obj.networks.total_floating_ips
+		ips = self.app.cloud_obj.networks.list_floating_ips()
+		allocated = unallocated = 0
+		for ip in ips:
+			if ip.state == 'up':
+				allocated += 1
+			elif ip.state == 'down':
+				unallocated += 1
+			else: 
+				pass
+		
+		return (('Total' , 'Allocated', 'Unallocated'), (total, allocated, unallocated))
+
 from cliff.command import Command
 
 class FloatingipSensu(Command):
