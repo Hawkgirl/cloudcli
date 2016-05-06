@@ -35,7 +35,8 @@ class FloatingipSummary(ShowOne):
 			else: 
 				pass
 		
-		return (('Total' , 'Allocated', 'Unallocated'), (total, allocated, unallocated))
+		free = total - len(ips)
+		return (('Total' , 'Free', 'Allocated', 'Unallocated'), (total, free, allocated, unallocated))
 
 from cliff.command import Command
 
