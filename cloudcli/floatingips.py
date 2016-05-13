@@ -5,8 +5,8 @@ class FloatingipsList(Lister):
 
     def take_action(self, args):
 	floating_ips = self.app.cloud_obj.networks.list_floating_ips()
-        return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID' ),
-                ((f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id) for f in floating_ips))
+        return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID', 'Tenant-Name' ),
+                ((f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id, f.tenant_name) for f in floating_ips))
 
 from cliff.show import ShowOne
 
@@ -23,6 +23,7 @@ class FloatingipShow(ShowOne):
 		return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID', 'Network-ID', 'Tenant-ID'), (f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id, f.network_id, f.tenant_id))
 
 class FloatingipSummary(ShowOne):
+	"""Show Total, free, alloacted, unallocated floating ips."""
 	def take_action(self, args):
 		total  = self.app.cloud_obj.networks.total_floating_ips
 		ips = self.app.cloud_obj.networks.list_floating_ips()
