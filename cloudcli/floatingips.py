@@ -5,8 +5,8 @@ class FloatingipsList(Lister):
 
     def take_action(self, args):
 	floating_ips = self.app.cloud_obj.networks.list_floating_ips()
-        return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID', 'Tenant-Name' ),
-                ((f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id, f.tenant_name) for f in floating_ips))
+        return (('ID', 'Public-IP', 'Private-IP', 'State', 'Port-ID', 'Tenant-Name', 'Tenant-ID' ),
+                ((f.id, f.floating_ip_address, f.fixed_ip_address, f.state, f.nic_id, f.tenant_name, f.id) for f in floating_ips))
 
 from cliff.show import ShowOne
 
@@ -52,10 +52,21 @@ class FloatingipSensu(Command):
         return parser
 
     def take_action(self, parsed_args):
+	error = False
+	fips = self.app.cloud_obj.networks.list_floating_ips()
+	down = [ip for ip in fips if ip.state =='down']
+	error_msg = ''
+	if len(down) > 0:
+		error_msg += '{} floating ip(s) in down state'.format(len(down))
+		error = True
+
 	free_count = self.app.cloud_obj.networks.free_floating_ips
-	count = 0
-	if free_count > parsed_args.limit:
+	if free_count <= parsed_args.limit:
+		error_msg += '{} Free Floatingips, less than limit of {} '.format(free_count, parsed_args.limit)
+		error = True
+
+	if not error:
 		return 'OK'
 	
-	raise Exception('{} Free Floatingips, less than limit of {} '.format(free_count, parsed_args.limit))
+	raise Exception(error_msg)
 	
