@@ -42,6 +42,7 @@ setup(name=PROJECT,
 	    'sensu-hypervisor = cloudcli.hypervisor:HypervisorSensu',
 	    'sensu-volumes = cloudcli.volumes:VolumeSensu',
 	    'sensu-floatingip = cloudcli.floatingips:FloatingipSensu',
+	    'graphite-instance-metrics = cloudcli.graphite:GraphiteInstanceMetrics',
 	    'graphite-metrics = cloudcli.graphite:GraphiteMetrics'
         ],
 	},
