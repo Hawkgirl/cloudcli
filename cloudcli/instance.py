@@ -15,7 +15,7 @@ class InstanceList(Lister):
     def take_action(self, args):
 	instances = self.app.cloud_obj.compute.list_instances()
         return (('ID', 'Name', 'Public-IP', 'Size', 'State', 'Image-Name' ),
-                ((instance.id, instance.name, instance.public_ip, instance.size, instance.state, instance.image_name) for instance in instances)
+                ((instance.oid, instance.name, instance.public_ip, instance.size, instance.state, instance.image_name) for instance in instances)
                 )
 
 from cliff.show import ShowOne
